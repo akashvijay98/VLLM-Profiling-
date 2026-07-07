@@ -27,6 +27,14 @@ Running the benchmark across 32 requests at 4 QPS highlighted the severe memory 
 **Takeaways:**
 By compressing the weights to 4-bit, the GPU transfers data from VRAM to compute cores much faster. This cut the decoding latency (TPOT) from **~20ms down to ~8.6ms**, yielding a 2.3x throughput increase under load without changing the hardware.
 
+## Visualizations
+
+### Base Model Performance (Qwen2-1.5B-Instruct FP16)
+![Qwen2-1.5B FP16 Benchmark Plots](images/qwen2-1.5B-insctruct.png)
+
+### Quantized Model Performance (Qwen2.5-1.5B-Instruct-AWQ)
+![Qwen2.5-1.5B AWQ Benchmark Plots](images/AWQPlot.png)
+
 ## Running It Locally
 
 **Prerequisites:**
