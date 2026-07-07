@@ -25,7 +25,9 @@ Running the benchmark across 32 requests at 4 QPS highlighted the severe memory 
 | **Throughput** | 47.98 tokens/s | 112.17 tokens/s | +133% |
 
 **Takeaways:**
-By compressing the weights to 4-bit, the GPU transfers data from VRAM to compute cores much faster. This cut the decoding latency (TPOT) from **~20ms down to ~8.6ms**, yielding a 2.3x throughput increase under load without changing the hardware.
+1. By compressing the weights to 4-bit, the GPU transfers data from VRAM to compute cores much faster. This cut the decoding latency (TPOT) from **~20ms down to ~8.6ms**, yielding a 2.3x throughput increase under load without changing the hardware.
+2. Under overlapping Poisson traffic spikes, vLLM utilizes continuous batching to dynamically group incoming prompts into active iteration cycles. This architecture ensures that inter-token latency (TPOT) remains tightly grouped and stable, peaking consistently at ~8.6ms for AWQ even when there is a spike in concurrent requests.
+3. While decoding latency stays stable under load, traffic spikes will temporarily saturate engine capacity. When this happens, new requests sit in the vLLM queue. This creates a clear long-tail distribution in the TTFT graphs: the baseline response is sub-100ms, but requests caught in a burst face queueing delays that push TTFT past 1000ms before the prefill phase even starts.
 
 ## Visualizations
 
